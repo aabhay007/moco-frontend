@@ -3,6 +3,7 @@
 'use client';
 
 import { signIn, signOut, useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 export default function AuthPage() {
   const { data: session, status } = useSession();
@@ -14,7 +15,7 @@ export default function AuthPage() {
   if (session) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 100 }}>
-        <img src={session.user?.image ?? ''} alt="avatar" style={{ borderRadius: '50%', width: 80, height: 80, marginBottom: 16 }} />
+        <Image src={session.user?.image ?? ''} alt="avatar" width={80} height={80} style={{ borderRadius: '50%', marginBottom: 16 }} />
         <h2>Welcome, {session.user?.name || session.user?.email}!</h2>
         <button onClick={() => signOut()} style={{ marginTop: 24, padding: '8px 24px', fontSize: 16 }}>Sign out</button>
       </div>
