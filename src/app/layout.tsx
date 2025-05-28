@@ -1,8 +1,9 @@
 // src/app/layout.tsx
 
 import { Inter } from 'next/font/google';
-import { AuthProvider } from '@/context/AuthContext';
+// import { AuthProvider } from '@/context/AuthContext';
 import './globals.css';
+import SessionProviderWrapper from '@/components/SessionProviderWrapper';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,9 +20,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>
+        <SessionProviderWrapper>
           {children}
-        </AuthProvider>
+        </SessionProviderWrapper>
       </body>
     </html>
   );
