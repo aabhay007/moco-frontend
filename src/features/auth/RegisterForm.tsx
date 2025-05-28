@@ -18,13 +18,11 @@ import {
 interface RegisterFormProps {
   onSubmit: (data: RegisterFormData) => Promise<void>;
   isLoading: boolean;
-  onSwitchToLogin: () => void;
 }
 
 export const RegisterForm: React.FC<RegisterFormProps> = ({
   onSubmit,
   isLoading,
-  onSwitchToLogin,
 }) => {
   const [formData, setFormData] = useState<RegisterFormData>({
     name: '',
