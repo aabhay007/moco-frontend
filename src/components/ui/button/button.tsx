@@ -1,6 +1,5 @@
 // components/ui/Button/Button.tsx
 import styled from '@emotion/styled'
-import { Theme } from '@/styles/theme'
 
 interface ButtonProps {
   variant?: 'primary' | 'secondary'

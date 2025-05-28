@@ -82,13 +82,11 @@ export const AuthSystem: React.FC = () => {
           <LoginForm
             onSubmit={handleLogin}
             isLoading={isLoading}
-            onSwitchToRegister={switchToRegister}
           />
         ) : (
           <RegisterForm
             onSubmit={handleRegister}
             isLoading={isLoading}
-            onSwitchToLogin={switchToLogin}
           />
         )}
 

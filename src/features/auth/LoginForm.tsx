@@ -18,13 +18,11 @@ import {
 interface LoginFormProps {
   onSubmit: (data: LoginFormData) => Promise<void>;
   isLoading: boolean;
-  onSwitchToRegister: () => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({
   onSubmit,
   isLoading,
-  onSwitchToRegister,
 }) => {
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
