@@ -15,14 +15,14 @@ interface FrameworkVersion {
 }
 
 const frameworks: FrameworkVersion[] = [
-  { name: 'React', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/react.png' },
-  { name: 'Angular', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/angular.png' },
-  { name: 'Vue', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/vuejs.png' },
-  { name: 'Next.js', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/nextjs.png' },
-  { name: 'Nuxt.js', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/nuxtjs.png' },
-  { name: 'Node.js', version: '', lastUpdated: '', category: 'backend', imageUrl: '/images/TechLogos/nodejs.png' },
-  { name: 'npm', version: '', lastUpdated: '', category: 'backend', imageUrl: '/images/TechLogos/npm.png' },
-  { name: 'NestJS', version: '', lastUpdated: '', category: 'backend', imageUrl: '/images/TechLogos/nestjs.png' },
+  { name: 'React', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/React.png' },
+  { name: 'Angular', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/Angular.png' },
+  { name: 'Vue', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/Vuejs.png' },
+  { name: 'Next.js', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/Nextjs.png' },
+  { name: 'Nuxt.js', version: '', lastUpdated: '', category: 'frontend', imageUrl: '/images/TechLogos/NuxtJS.png' },
+  { name: 'Node.js', version: '', lastUpdated: '', category: 'backend', imageUrl: '/images/TechLogos/Nodejs.png' },
+  { name: 'npm', version: '', lastUpdated: '', category: 'backend', imageUrl: '/images/TechLogos/NPM.png' },
+  { name: 'NestJS', version: '', lastUpdated: '', category: 'backend', imageUrl: '/images/TechLogos/Nestjs.png' },
 ];
 
 const categoryColors = {
