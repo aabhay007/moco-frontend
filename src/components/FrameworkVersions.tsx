@@ -26,9 +26,9 @@ const frameworks: FrameworkVersion[] = [
 ];
 
 const categoryColors = {
-  frontend: 'bg-blue-500',
-  backend: 'bg-green-500',
-  database: 'bg-purple-500',
+  frontend: 'bg-blue-500 dark:bg-blue-600',
+  backend: 'bg-green-500 dark:bg-green-600',
+  database: 'bg-purple-500 dark:bg-purple-600',
 };
 
 const frameworkDocs: Record<string, string> = {
@@ -117,16 +117,16 @@ export default function FrameworkVersions() {
   }, []);
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-white dark:bg-gray-800">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-gray-900">Framework Versions</CardTitle>
+        <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">Framework Versions</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {versions.map((framework) => (
             <div
               key={framework.name}
-              className="p-6 rounded-xl bg-white text-gray-900 shadow-lg transition-transform hover:scale-105 hover:shadow-xl flex flex-col justify-between min-h-[160px]"
+              className="p-6 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-lg dark:shadow-gray-900/50 transition-transform hover:scale-105 hover:shadow-xl dark:hover:shadow-gray-900/70 flex flex-col justify-between min-h-[160px]"
             >
               <div className="flex items-center justify-between mb-2">
                 {framework.imageUrl && (
@@ -138,23 +138,23 @@ export default function FrameworkVersions() {
                     className="mr-3"
                   />
                 )}
-                <h3 className="font-semibold text-lg text-gray-900">{framework.name}</h3>
+                <h3 className="font-semibold text-lg text-gray-900 dark:text-white">{framework.name}</h3>
                 <Badge className={`${categoryColors[framework.category]} text-white`}>
                   {framework.category}
                 </Badge>
               </div>
               {loading ? (
-                <Skeleton className="h-6 w-24" />
+                <Skeleton className="h-6 w-24 bg-gray-200 dark:bg-gray-700" />
               ) : (
                 <div className="space-y-3 flex-1 flex flex-col justify-between">
-                  <p className="text-sm text-gray-700">
-                    Version: <span className="font-medium text-gray-900">{framework.version || 'N/A'}</span>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">
+                    Version: <span className="font-medium text-gray-900 dark:text-white">{framework.version || 'N/A'}</span>
                   </p>
                   <a
                     href={frameworkDocs[framework.name]}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="self-start px-2 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg transition-all duration-200 font-semibold text-center"
+                    className="self-start px-2 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 text-white rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 hover:shadow-lg transition-all duration-200 font-semibold text-center"
                   >
                     View Docs
                   </a>
