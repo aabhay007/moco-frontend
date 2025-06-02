@@ -6,6 +6,7 @@ import { signIn, signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
+import FrameworkVersions from '@/components/FrameworkVersions';
 
 export default function AuthPage() {
   const { data: session, status } = useSession();
@@ -23,43 +24,53 @@ export default function AuthPage() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
         <Navbar />
         <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-8"
-          >
-            <div className="flex flex-col items-center">
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Image 
-                  src={session.user?.image ?? ''} 
-                  alt="avatar" 
-                  width={100} 
-                  height={100} 
-                  className="rounded-full border-4 border-blue-500 shadow-lg"
-                />
-              </motion.div>
-              <motion.h2 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="mt-4 text-2xl font-bold text-gray-800"
-              >
-                Welcome, {session.user?.name || session.user?.email}!
-              </motion.h2>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => signOut()}
-                className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 font-semibold"
-              >
-                Sign out
-              </motion.button>
-            </div>
-          </motion.div>
+          <div className="max-w-7xl mx-auto space-y-8">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="max-w-md mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-8"
+            >
+              <div className="flex flex-col items-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <Image 
+                    src={session.user?.image ?? ''} 
+                    alt="avatar" 
+                    width={100} 
+                    height={100} 
+                    className="rounded-full border-4 border-blue-500 shadow-lg"
+                  />
+                </motion.div>
+                <motion.h2 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-4 text-2xl font-bold text-gray-800"
+                >
+                  Welcome, {session.user?.name || session.user?.email}!
+                </motion.h2>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => signOut()}
+                  className="mt-6 px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 font-semibold"
+                >
+                  Sign out
+                </motion.button>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <FrameworkVersions />
+            </motion.div>
+          </div>
         </div>
       </div>
     );
