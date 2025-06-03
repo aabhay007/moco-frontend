@@ -7,9 +7,18 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import FrameworkVersions from '@/components/FrameworkVersions';
+import { ImageUpload } from '@/components/ImageUpload';
+import { useState, useEffect } from 'react';
 
 export default function AuthPage() {
   const { data: session, status } = useSession();
+  const [uploadedImagePath, setUploadedImagePath] = useState<string | null>(null);
+  const [baseUrl, setBaseUrl] = useState<string>('');
+
+  useEffect(() => {
+    // Get the base URL of the site
+    setBaseUrl(window.location.origin);
+  }, []);
 
   if (status === 'loading') {
     return (
@@ -67,6 +76,49 @@ export default function AuthPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
+              className="max-w-xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden p-8"
+            >
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 text-center">
+                Upload Images
+              </h2>
+              <ImageUpload onUploadComplete={(path) => {
+                setUploadedImagePath(path);
+                console.log('Uploaded image path:', path);
+              }} />
+              {uploadedImagePath && (
+                <div className="mt-4 space-y-4">
+                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <p className="text-green-700 dark:text-green-400">
+                      Image uploaded successfully!
+                    </p>
+                  </div>
+                  <div className="p-4 bg-gray-50 dark:bg-gray-900/20 rounded-lg">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Image URL:
+                    </p>
+                    <div className="flex items-center space-x-2">
+                      <code className="flex-1 p-2 bg-white dark:bg-gray-800 rounded text-sm break-all">
+                        {`${baseUrl}${uploadedImagePath}`}
+                      </code>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${baseUrl}${uploadedImagePath}`);
+                        }}
+                        className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        title="Copy to clipboard"
+                      >
+                        📋
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
             >
               <FrameworkVersions />
             </motion.div>
