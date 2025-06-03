@@ -62,7 +62,7 @@ export const ImageUpload = forwardRef<ImageUploadRef, ImageUploadProps>(
       } finally {
         setIsUploading(false);
       }
-    }, [onUploadComplete, onClear]);
+    }, [onUploadComplete, clearImage]);
 
     const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
       onDrop,
@@ -70,7 +70,7 @@ export const ImageUpload = forwardRef<ImageUploadRef, ImageUploadProps>(
         'image/*': ['.png', '.jpg', '.jpeg', '.gif', '.webp']
       },
       maxFiles: 1,
-      noClick: true, // Disable click on the dropzone itself
+      noClick: true,
     });
 
     // Expose the open function via ref
@@ -121,4 +121,6 @@ export const ImageUpload = forwardRef<ImageUploadRef, ImageUploadProps>(
       </div>
     );
   }
-); 
+);
+
+ImageUpload.displayName = 'ImageUpload'; 

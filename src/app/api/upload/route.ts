@@ -40,7 +40,7 @@ export async function POST(request: Request) {
 
     // Return the secure URL from Cloudinary
     return NextResponse.json({ 
-      path: (result as any).secure_url 
+      path: (result as { secure_url: string }).secure_url
     });
   } catch (error) {
     console.error('Error uploading file:', error);

@@ -8,17 +8,12 @@ import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import FrameworkVersions from '@/components/FrameworkVersions';
 import { ImageUpload, ImageUploadRef } from '@/components/ImageUpload';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 export default function AuthPage() {
   const { data: session, status } = useSession();
   const [uploadedImagePath, setUploadedImagePath] = useState<string | null>(null);
-  const [baseUrl, setBaseUrl] = useState<string>('');
   const imageUploadRef = useRef<ImageUploadRef>(null);
-
-  useEffect(() => {
-    setBaseUrl(window.location.origin);
-  }, []);
 
   const handleUploadComplete = (path: string) => {
     setUploadedImagePath(path);
