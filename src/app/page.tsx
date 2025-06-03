@@ -7,18 +7,30 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import FrameworkVersions from '@/components/FrameworkVersions';
-import { ImageUpload } from '@/components/ImageUpload';
-import { useState, useEffect } from 'react';
+import { ImageUpload, ImageUploadRef } from '@/components/ImageUpload';
+import { useState, useEffect, useRef } from 'react';
 
 export default function AuthPage() {
   const { data: session, status } = useSession();
   const [uploadedImagePath, setUploadedImagePath] = useState<string | null>(null);
   const [baseUrl, setBaseUrl] = useState<string>('');
+  const imageUploadRef = useRef<ImageUploadRef>(null);
 
   useEffect(() => {
-    // Get the base URL of the site
     setBaseUrl(window.location.origin);
   }, []);
+
+  const handleUploadComplete = (path: string) => {
+    setUploadedImagePath(path);
+    console.log('Uploaded image path:', path);
+  };
+
+  const handleClear = () => {
+    setUploadedImagePath(null);
+    if (imageUploadRef.current) {
+      imageUploadRef.current.openFileDialog();
+    }
+  };
 
   if (status === 'loading') {
     return (
@@ -81,10 +93,11 @@ export default function AuthPage() {
               <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-6 text-center">
                 Upload Images
               </h2>
-              <ImageUpload onUploadComplete={(path) => {
-                setUploadedImagePath(path);
-                console.log('Uploaded image path:', path);
-              }} />
+              <ImageUpload 
+                onUploadComplete={handleUploadComplete}
+                onClear={handleClear}
+                ref={imageUploadRef}
+              />
               {uploadedImagePath && (
                 <div className="mt-4 space-y-4">
                   <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
@@ -98,19 +111,25 @@ export default function AuthPage() {
                     </p>
                     <div className="flex items-center space-x-2">
                       <code className="flex-1 p-2 bg-white dark:bg-gray-800 rounded text-sm break-all">
-                        {`${baseUrl}${uploadedImagePath}`}
+                        {uploadedImagePath}
                       </code>
                       <button
                         onClick={() => {
-                          navigator.clipboard.writeText(`${baseUrl}${uploadedImagePath}`);
+                          navigator.clipboard.writeText(uploadedImagePath);
                         }}
-                        className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                        className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 cursor-pointer transition-colors"
                         title="Copy to clipboard"
                       >
                         📋
                       </button>
                     </div>
                   </div>
+                  <button
+                    onClick={handleClear}
+                    className="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 text-white rounded-lg shadow-md hover:shadow-lg transition-all duration-200 font-semibold cursor-pointer hover:from-blue-600 hover:to-indigo-700 active:scale-[0.98]"
+                  >
+                    Upload Another Image
+                  </button>
                 </div>
               )}
             </motion.div>

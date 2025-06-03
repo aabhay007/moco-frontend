@@ -1,7 +1,12 @@
 import { NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
-import { v4 as uuidv4 } from 'uuid';
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(request: Request) {
   try {
@@ -18,22 +23,25 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Create unique filename
-    const uniqueId = uuidv4();
-    const extension = file.name.split('.').pop();
-    const filename = `${uniqueId}.${extension}`;
-    
-    // Ensure the directory exists
-    const uploadDir = join(process.cwd(), 'public', 'free');
-    
-    // Save the file
-    const path = join(uploadDir, filename);
-    await writeFile(path, buffer);
+    // Convert buffer to base64
+    const base64String = buffer.toString('base64');
+    const dataURI = `data:${file.type};base64,${base64String}`;
 
-    // Return the public path
-    const publicPath = `/free/${filename}`;
-    
-    return NextResponse.json({ path: publicPath });
+    // Upload to Cloudinary
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload(dataURI, {
+        folder: 'moco',
+        resource_type: 'auto',
+      }, (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      });
+    });
+
+    // Return the secure URL from Cloudinary
+    return NextResponse.json({ 
+      path: (result as any).secure_url 
+    });
   } catch (error) {
     console.error('Error uploading file:', error);
     return NextResponse.json(
