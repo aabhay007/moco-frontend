@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { v2 as cloudinary } from 'cloudinary';
+import { getServerSession } from 'next-auth';
+import axiosInstance from '@/lib/axios';
 
 // Configure Cloudinary
 cloudinary.config({
@@ -10,12 +12,33 @@ cloudinary.config({
 
 export async function POST(request: Request) {
   try {
+    const session = await getServerSession();
+    
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { 
+          success: false,
+          statusCode: 401,
+          message: "Unauthorized",
+          result: null,
+          errors: ["User not authenticated"]
+        },
+        { status: 401 }
+      );
+    }
+
     const formData = await request.formData();
     const file = formData.get('file') as File;
     
     if (!file) {
       return NextResponse.json(
-        { error: 'No file uploaded' },
+        { 
+          success: false,
+          statusCode: 400,
+          message: "Bad Request",
+          result: null,
+          errors: ["No file uploaded"]
+        },
         { status: 400 }
       );
     }
@@ -38,14 +61,43 @@ export async function POST(request: Request) {
       });
     });
 
-    // Return the secure URL from Cloudinary
-    return NextResponse.json({ 
-      path: (result as { secure_url: string }).secure_url
+    const imageLink = (result as { secure_url: string }).secure_url;
+
+    // Send the image link to the backend
+    const backendResponse = await axiosInstance.post('/api/image/upload-image', {
+      email: session.user.email,
+      imageLink: imageLink
     });
-  } catch (error) {
+
+    // Check if the backend request was successful
+    if (!backendResponse.data.success) {
+      return NextResponse.json(
+        backendResponse.data,
+        { status: backendResponse.data.statusCode }
+      );
+    }
+
+    // Return the response in the expected format
+    return NextResponse.json({ 
+      success: true,
+      statusCode: 200,
+      message: "Image uploaded successfully",
+      result: {
+        email: session.user.email,
+        imageLink: imageLink
+      },
+      errors: null
+    });
+  } catch (error: any) {
     console.error('Error uploading file:', error);
     return NextResponse.json(
-      { error: 'Error uploading file' },
+      { 
+        success: false,
+        statusCode: 500,
+        message: "Internal Server Error",
+        result: null,
+        errors: [error.message || "Error uploading file"]
+      },
       { status: 500 }
     );
   }

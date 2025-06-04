@@ -4,12 +4,27 @@ import { useSession, signOut } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ThemeToggle } from './ThemeToggle';
 
 const Navbar = () => {
   const { data: session } = useSession();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const profileDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (profileDropdownRef.current && !profileDropdownRef.current.contains(event.target as Node)) {
+        setIsProfileDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const navItems = [
     { name: 'Home', href: '/' },
@@ -66,6 +81,7 @@ const Navbar = () => {
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   className="relative"
+                  ref={profileDropdownRef}
                 >
                   <Image
                     src={session.user?.image ?? ''}
@@ -73,9 +89,9 @@ const Navbar = () => {
                     width={40}
                     height={40}
                     className="rounded-full cursor-pointer"
-                    onClick={() => setIsMenuOpen(!isMenuOpen)}
+                    onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
                   />
-                  {isMenuOpen && (
+                  {isProfileDropdownOpen && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -119,12 +135,12 @@ const Navbar = () => {
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-300 hover:text-gray-500 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
             >
               <span className="sr-only">Open main menu</span>
               <svg
-                className={`${isMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
+                className={`${isMobileMenuOpen ? 'hidden' : 'block'} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -138,7 +154,7 @@ const Navbar = () => {
                 />
               </svg>
               <svg
-                className={`${isMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
+                className={`${isMobileMenuOpen ? 'block' : 'hidden'} h-6 w-6`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -159,7 +175,7 @@ const Navbar = () => {
       {/* Mobile menu */}
       <motion.div
         initial={false}
-        animate={{ height: isMenuOpen ? 'auto' : 0 }}
+        animate={{ height: isMobileMenuOpen ? 'auto' : 0 }}
         className="md:hidden overflow-hidden bg-white dark:bg-gray-900"
       >
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
