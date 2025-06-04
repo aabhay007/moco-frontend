@@ -19,14 +19,6 @@ export const ImageUpload = forwardRef<ImageUploadRef, ImageUploadProps>(
     const [isUploading, setIsUploading] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
 
-    const clearImage = () => {
-      if (preview) {
-        URL.revokeObjectURL(preview);
-      }
-      setPreview(null);
-      onClear();
-    };
-
     const onDrop = useCallback(async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
       if (!file) return;
@@ -59,11 +51,16 @@ export const ImageUpload = forwardRef<ImageUploadRef, ImageUploadProps>(
         setPreview(null);
       } catch (error) {
         console.error('Error uploading file:', error);
-        clearImage();
+        // Clear preview and state on error
+        if (previewUrl) {
+          URL.revokeObjectURL(previewUrl);
+        }
+        setPreview(null);
+        onClear();
       } finally {
         setIsUploading(false);
       }
-    }, [onUploadComplete, clearImage]);
+    }, [onUploadComplete, onClear]);
 
     const { getRootProps, getInputProps, isDragActive, open } = useDropzone({
       onDrop,

@@ -88,7 +88,7 @@ export async function POST(request: Request) {
       },
       errors: null
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error uploading file:', error);
     return NextResponse.json(
       { 
@@ -96,7 +96,7 @@ export async function POST(request: Request) {
         statusCode: 500,
         message: "Internal Server Error",
         result: null,
-        errors: [error.message || "Error uploading file"]
+        errors: [error instanceof Error ? error.message : "Error uploading file"]
       },
       { status: 500 }
     );
