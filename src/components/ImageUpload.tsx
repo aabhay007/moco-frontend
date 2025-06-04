@@ -3,6 +3,7 @@
 import { useState, useCallback, useImperativeHandle, forwardRef } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Image from 'next/image';
+import axiosInstance from '@/lib/axios';
 
 interface ImageUploadProps {
   onUploadComplete: (imagePath: string) => void;
@@ -40,17 +41,17 @@ export const ImageUpload = forwardRef<ImageUploadRef, ImageUploadProps>(
       formData.append('file', file);
 
       try {
-        const response = await fetch('/api/upload', {
-          method: 'POST',
-          body: formData,
+        const response = await axiosInstance.post('/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
         });
 
-        if (!response.ok) {
+        if (response.status !== 200) {
           throw new Error('Upload failed');
         }
 
-        const data = await response.json();
-        onUploadComplete(data.path);
+        onUploadComplete(response.data.result.imageLink);
         // Clear preview after successful upload
         if (previewUrl) {
           URL.revokeObjectURL(previewUrl);
