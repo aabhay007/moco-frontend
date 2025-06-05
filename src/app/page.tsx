@@ -9,6 +9,7 @@ import Navbar from '@/components/Navbar';
 import FrameworkVersions from '@/components/FrameworkVersions';
 import { ImageUpload, ImageUploadRef } from '@/components/ImageUpload';
 import { useState, useRef } from 'react';
+import UserImages from '@/components/UserImages';
 
 export default function AuthPage() {
   const { data: session, status } = useSession();
@@ -133,6 +134,15 @@ export default function AuthPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
+              className="max-w-7xl mx-auto mt-8"
+            >
+              <UserImages />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
             >
               <FrameworkVersions />
             </motion.div>

@@ -6,6 +6,7 @@ import Image from 'next/image';
 import axiosInstance from '@/lib/axios';
 import { useSession } from 'next-auth/react';
 import { AxiosError } from 'axios';
+import { eventEmitter } from '@/lib/events';
 
 interface ImageUploadProps {
   onUploadComplete: (imagePath: string) => void;
@@ -86,6 +87,8 @@ export const ImageUpload = forwardRef<ImageUploadRef, ImageUploadProps>(
         }
 
         onUploadComplete(response.data.result.imageLink);
+        // Emit event for successful upload
+        eventEmitter.emit('imageUploaded');
         // Clear preview after successful upload
         if (previewUrl) {
           URL.revokeObjectURL(previewUrl);
